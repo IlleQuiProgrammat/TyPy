@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TyPy.Compiler", "TyPy.Compiler\TyPy.Compiler.csproj", "{7BF97669-C70F-4E67-8F0D-3FA1698A2E7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TyPy.Cli", "TyPy.Cli\TyPy.Cli.csproj", "{C056E495-0773-4EDC-BBC5-38E8F11EFE77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TyPy.Tests", "TyPy.Tests\TyPy.Tests.csproj", "{EB13EBCB-1441-4C4F-B70B-CD01A7CDAA13}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C056E495-0773-4EDC-BBC5-38E8F11EFE77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C056E495-0773-4EDC-BBC5-38E8F11EFE77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BF97669-C70F-4E67-8F0D-3FA1698A2E7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BF97669-C70F-4E67-8F0D-3FA1698A2E7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB13EBCB-1441-4C4F-B70B-CD01A7CDAA13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB13EBCB-1441-4C4F-B70B-CD01A7CDAA13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB13EBCB-1441-4C4F-B70B-CD01A7CDAA13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB13EBCB-1441-4C4F-B70B-CD01A7CDAA13}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
