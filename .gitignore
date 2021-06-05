@@ -5,13 +5,3 @@
 .vscode/
 *.dll
 *.exe
-
-# ANTLR-Generated files
-/TyPy.Compiler/TyPy.interp
-/TyPy.Compiler/TyPy.tokens
-/TyPy.Compiler/TyPyBaseListener.cs
-/TyPy.Compiler/TyPyLexer.cs
-/TyPy.Compiler/TyPyLexer.interp
-/TyPy.Compiler/TyPyLexer.tokens
-/TyPy.Compiler/TyPyListener.cs
-/TyPy.Compiler/TyPyParser.cs
