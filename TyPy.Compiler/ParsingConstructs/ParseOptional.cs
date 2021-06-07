@@ -8,6 +8,10 @@ namespace TyPy.Compiler.ParsingConstructs
         public ParseToken Token { get; }
         public IParsable SubParsable { get; }
 
+        /// <summary>
+        /// If parsing of the given IParsable is successful, then it is used, otherwise it is discarded.
+        /// </summary>
+        /// <param name="token">The token that should or should not be parsed</param>
         public ParseOptional(ParseToken token)
         {
             Token = token;

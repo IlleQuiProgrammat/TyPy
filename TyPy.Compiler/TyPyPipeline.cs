@@ -8,16 +8,17 @@ namespace TyPy.Compiler
 {
     public class TyPyPipeline
     {
-        /*
-         * Infix notation bnf
-         * compilation_unit: ((expression | comment) NEWLINE)+;
-         * expression: m_expression (('+' | '-') expression)?;
-         * m_expression: i_expression (('*' | '/') m_expression)?;
-         * i_expression: b_expression ('^' i_expression);
-         * b_expression: NUMBER | '(' expression ')';
-         * comment: '#' [\w ]*;
-         * NUMBER: [0-9]+;
-         */
+        /// <summary>
+        /// Describes the configuration of the pipeline. Currently set to an infix notation parser. See BNF:
+        /// * Infix notation bnf
+        /// * compilation_unit: ((expression | comment) NEWLINE)+;
+        /// * expression: m_expression (('+' | '-') expression)?;
+        /// * m_expression: i_expression (('*' | '/') m_expression)?;
+        /// * i_expression: b_expression ('^' i_expression);
+        /// * b_expression: NUMBER | '(' expression ')';
+        /// * comment: '#' [\w ]*;
+        /// * NUMBER: [0-9]+;
+        /// </summary>
         public readonly PipelineConfiguration Configuration = new()
         {
             LexicalSyntax = new()
@@ -30,8 +31,8 @@ namespace TyPy.Compiler
                 {LexToken.Number, new Regex("[0-9]+")},
                 {LexToken.Plus, new Regex(@"\+")},
                 {LexToken.Times, new Regex(@"\*")},
-                {LexToken.CloseBrackets, new Regex(@"\(")},
-                {LexToken.OpenBrackets, new Regex(@"\)")},
+                {LexToken.CloseBrackets, new Regex(@"\)")},
+                {LexToken.OpenBrackets, new Regex(@"\(")},
                 {LexToken.Whitespace, new Regex(@"[\t ]+")}
             },
             CompilationUnitToken = ParseToken.CompilationUnit,
@@ -87,6 +88,94 @@ namespace TyPy.Compiler
         {
             var lexemes = _lexer.Lex(fileContents);
             var astNode = _parser.Parse(lexemes);
+            foreach (var line in astNode.Children)
+            {
+                Console.WriteLine(ComputeExpression(line.Children[0]));
+            }
+        }
+
+        private double ComputeExpression(AstNode astNode)
+        {
+            if (astNode.Lexeme?.Token == LexToken.Number)
+            {
+                return int.Parse(astNode.Lexeme.Content);
+            }
+
+            if (astNode.Children.Count == 1)
+            {
+                return ComputeExpression(astNode.Children[0]);
+            }
+
+            switch (astNode.Token)
+            {
+                case ParseToken.Anonymous:
+                    throw new ParseException("Anonymous token cannot appear in this context.");
+                case ParseToken.Comment:
+                    return 0;
+                case ParseToken.Expression:
+                    return HandleExpression(astNode);
+                case ParseToken.DivMulExpression:
+                    return HandleDivMulExpression(astNode);
+                case ParseToken.IndexExpression:
+                    return Math.Pow(ComputeExpression(astNode.Children[0]),
+                        ComputeExpression(astNode.Children[1].Children[1]));
+                case ParseToken.BracketedExpression:
+                    return ComputeExpression(astNode.Children[1]);
+                default:
+                    throw new ParseException($"Token ${astNode.Token} has no parse configuration.");
+            }
+        }
+
+        private double HandleExpression(AstNode astNode)
+        {
+            var initial = ComputeExpression(astNode.Children[0]);
+            var currentNode = astNode.Children[1];
+            while (currentNode.Parent.Token == ParseToken.Expression)
+            {
+                var calculation = currentNode.Children[0].Lexeme.Token;
+                if (calculation == LexToken.Plus)
+                {
+                    initial += ComputeExpression(currentNode.Children[1].Children[0]);
+                }
+                else
+                {
+                    initial -= ComputeExpression(currentNode.Children[1].Children[0]);
+                }
+
+                if (currentNode.Children[1].Children.Count == 1)
+                {
+                    return initial;
+                }
+                currentNode = currentNode.Children[1].Children[1];
+            }
+
+            return initial;
+        }
+
+        private double HandleDivMulExpression(AstNode astNode)
+        {
+            var initial = ComputeExpression(astNode.Children[0]);
+            var currentNode = astNode.Children[1];
+            while (currentNode.Parent.Token == ParseToken.DivMulExpression)
+            {
+                var calculation = currentNode.Children[0].Lexeme.Token;
+                if (calculation == LexToken.Times)
+                {
+                    initial *= ComputeExpression(currentNode.Children[1].Children[0]);
+                }
+                else
+                {
+                    initial /= ComputeExpression(currentNode.Children[1].Children[0]);
+                }
+
+                if (currentNode.Children[1].Children.Count == 1)
+                {
+                    return initial;
+                }
+                currentNode = currentNode.Children[1].Children[1];
+            }
+
+            return initial;
         }
     }
 }
