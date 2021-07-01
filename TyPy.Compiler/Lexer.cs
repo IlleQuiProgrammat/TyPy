@@ -20,13 +20,13 @@ namespace TyPy.Compiler
             while (characterPosition < code.Length)
             {
                 var successful = false;
-                foreach (var lexeme in Configuration.LexicalSyntax.Keys)
+                foreach (var lexeme in Configuration.LexicalSyntax)
                 {
-                    var match = Configuration.LexicalSyntax[lexeme].Match(code, characterPosition);
+                    var match = lexeme.Value.Match(code, characterPosition);
                     if (match.Success && match.Index == characterPosition)
                     {
                         successful = true;
-                        lexemes.Add(new Lexeme(lexeme, match.Value));
+                        lexemes.Add(new Lexeme(lexeme.Key, match.Value));
                         characterPosition += match.Length;
                         break;
                     }

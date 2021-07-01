@@ -29,12 +29,12 @@ namespace TyPy.Compiler.ParsingConstructs
         }
         
         public bool TryParse(ArraySegment<Lexeme> lexemes, PipelineConfiguration configuration,
-            out AstNode astNode)
+            out ParseTreeNode parseTreeNode)
         {
             var i = 0;
             if (i >= lexemes.Count)
             {
-                astNode = null;
+                parseTreeNode = null;
                 return false;
             }
             while (configuration.DefaultSkipLexemes.Contains(lexemes[i].Token) && lexemes[i].Token != Token)
@@ -42,18 +42,18 @@ namespace TyPy.Compiler.ParsingConstructs
                 i++;
                 if (i >= lexemes.Count)
                 {
-                    astNode = null;
+                    parseTreeNode = null;
                     return false;
                 }
             }
 
             if (lexemes[i].Token == Token)
             {
-                astNode = new AstNode {Lexeme = lexemes[i], LexemeCount = i + 1};
+                parseTreeNode = new ParseTreeNode {Lexeme = lexemes[i], LexemeCount = i + 1};
                 return true;
             }
             
-            astNode = null;
+            parseTreeNode = null;
             return false;
         }
     }

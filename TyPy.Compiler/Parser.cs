@@ -13,7 +13,7 @@ namespace TyPy.Compiler
             Configuration = configuration;
         }
 
-        public AstNode Parse(List<Lexeme> lexemes)
+        public ParseTreeNode Parse(List<Lexeme> lexemes)
         {
             if (!Configuration.Grammar.ContainsKey(Configuration.CompilationUnitToken))
             {
@@ -22,13 +22,13 @@ namespace TyPy.Compiler
             }
 
             var rootParse = Configuration.Grammar[Configuration.CompilationUnitToken];
-            AstNode astNode;
-            if (!rootParse.TryParse(lexemes.ToArray(), Configuration, out astNode))
+            ParseTreeNode parseTreeNode;
+            if (!rootParse.TryParse(lexemes.ToArray(), Configuration, out parseTreeNode))
             {
                 throw new ParseException("Parsing failed somewhere.");
             }
 
-            return astNode;
+            return parseTreeNode;
         }
     }
 }

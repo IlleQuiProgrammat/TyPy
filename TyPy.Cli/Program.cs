@@ -34,7 +34,6 @@ namespace TyPy.Cli
             rootCommand.Description = "Compiler for TyPy - a statically-typed, python-based language.";
             // Note that the parameters of the handler method are matched according to the names of the options
             rootCommand.Handler = CommandHandler.Create<FileInfo, FileInfo>(Run);
-            Run(null, null);
             // Parse the incoming args and invoke the handler
             return rootCommand.InvokeAsync(args).Result;
         }
@@ -45,17 +44,33 @@ namespace TyPy.Cli
             Console.WriteLine(inFile?.FullName);
             var tyPyPipeline = new TyPyPipeline();
             var begin = DateTime.Now;
-            tyPyPipeline.Execute("1 - (5 + 2) + 6\n" +
-                                 "5+3*6\n" +
-                                 "7*3-10/2\n" +
-                                 "4*6/3\n" +
-                                 "4*5+4*3\n" +
-                                 "4 ^ 2 / 2\n" +
-                                 "5+10*5\n" +
-                                 "8+5^2-9\n" +
-                                 "(6*5)/(10-7)\n" +
-                                 "8-5*2^2\n");
+            tyPyPipeline.Execute("x = 4\n" +
+                                 "y = 15\n" +
+                                 "z = (x - y * 2) ** 3\n");
             Console.WriteLine($"Compilation took: {DateTime.Now - begin}");
+            // var assemblyName = new AssemblyName("TestOutput");
+            // var assemblyBuilder =
+            //     AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndCollect);
+            // var moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName.Name);
+            // var exampleClass = moduleBuilder.DefineType("Ops", TypeAttributes.Public);
+            // var methodBuilder = exampleClass.DefineMethod(
+            //     "SumIt",
+            //     MethodAttributes.Public,
+            //     CallingConventions.Standard,
+            //     typeof(int),
+            //     new[] {typeof(int), typeof(int)}
+            // );
+            // var ilGenerator = methodBuilder.GetILGenerator();
+            //
+            // ilGenerator.Emit(OpCodes.Ldarg_1);
+            // ilGenerator.Emit(OpCodes.Ldarg_2);
+            // ilGenerator.Emit(OpCodes.Add_Ovf);
+            // ilGenerator.Emit(OpCodes.Ret);
+            //
+            // Type newType = exampleClass.CreateType();
+            //
+            // dynamic typeInstance = Activator.CreateInstance(newType);
+            // Console.WriteLine(typeInstance.SumIt(3, 4));
         }
     }
 }

@@ -35,7 +35,7 @@ namespace TyPy.Compiler.ParsingConstructs
         }
         
         public bool TryParse(ArraySegment<Lexeme> lexemes, PipelineConfiguration configuration,
-            out AstNode astNode)
+            out ParseTreeNode parseTreeNode)
         {
             IParsable resolvedParsable;
             
@@ -55,7 +55,7 @@ namespace TyPy.Compiler.ParsingConstructs
             }
             
             var success = true;
-            var localAstNode = new AstNode();
+            var localAstNode = new ParseTreeNode();
             var count = 0;
             do
             {
@@ -75,11 +75,11 @@ namespace TyPy.Compiler.ParsingConstructs
 
             if (count == 0)
             {
-                astNode = null;
+                parseTreeNode = null;
                 return false;
             }
 
-            astNode = localAstNode;
+            parseTreeNode = localAstNode;
             return true;
         }
     }

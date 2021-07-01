@@ -22,15 +22,15 @@ namespace TyPy.Compiler.ParsingConstructs
         }
         
         public bool TryParse(ArraySegment<Lexeme> lexemes, PipelineConfiguration configuration,
-            out AstNode astNode)
+            out ParseTreeNode parseTreeNode)
         {
             if (!configuration.Grammar.ContainsKey(Token))
             {
                 throw new ParseException($"Grammar is incomplete. Token {Token} could not be resolved.");
             }
 
-            var success = configuration.Grammar[Token].TryParse(lexemes, configuration, out astNode);
-            if (success) astNode.Token = Token;
+            var success = configuration.Grammar[Token].TryParse(lexemes, configuration, out parseTreeNode);
+            if (success) parseTreeNode.Token = Token;
             return success;
         }
     }

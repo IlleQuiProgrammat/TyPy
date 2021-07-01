@@ -14,9 +14,9 @@ namespace TyPy.Compiler.ParsingConstructs
         /// </summary>
         /// <param name="lexemes">Represents a view into the lexemes. ArraySegment is chosen for performance reasons.</param>
         /// <param name="configuration">Configuration object for lexemes, skippable tokens, and parse tokens for referencing tokens.</param>
-        /// <param name="astNode">`out` parameter of the successfully parsed node. `null` if the parsing was not successful.</param>
+        /// <param name="parseTreeNode">`out` parameter of the successfully parsed node. `null` if the parsing was not successful.</param>
         /// <returns>`true` when the node was passed successfully, `false` when the node was not parsed successfully</returns>
         public bool TryParse(ArraySegment<Lexeme> lexemes, PipelineConfiguration configuration,
-            out AstNode astNode);
+            out ParseTreeNode parseTreeNode);
     }
 }

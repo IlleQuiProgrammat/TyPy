@@ -7,7 +7,7 @@ namespace TyPy.Compiler
 {
     public class PipelineConfiguration
     {
-        public Dictionary<LexToken, Regex> LexicalSyntax { get; set; }
+        public List<KeyValuePair<LexToken, Regex>> LexicalSyntax { get; set; }
         public Dictionary<ParseToken, IParsable> Grammar { get; set; }
         public ParseToken CompilationUnitToken { get; set; }
         public HashSet<LexToken> DefaultSkipLexemes { get; set; }

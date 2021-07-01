@@ -82,5 +82,5 @@ NUMBER: '-'? [0-9]+;
 FSTRING: 'f' STRING;
 STRING: '""';
 NEWLINE: '\n';
-INDENT: (' ' | '\t');
 WHITESPACE: (' ' | '\t') -> skip;
+INDENT: (' ' | '\t');

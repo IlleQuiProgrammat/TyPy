@@ -36,20 +36,20 @@ namespace TyPy.Compiler.ParsingConstructs
         }
 
         public bool TryParse(ArraySegment<Lexeme> lexemes, PipelineConfiguration configuration,
-            out AstNode astNode)
+            out ParseTreeNode parseTreeNode)
         {
-            astNode = new AstNode();
+            parseTreeNode = new ParseTreeNode();
             if (SubParsables is not null)
             {
                 foreach (var subParsable in SubParsables)
                 {
-                    if (!subParsable.TryParse(lexemes.Slice(astNode.LexemeCount), configuration, out var localAstNode))
+                    if (!subParsable.TryParse(lexemes.Slice(parseTreeNode.LexemeCount), configuration, out var localAstNode))
                     {
-                        astNode = null;
+                        parseTreeNode = null;
                         return false;
                     }
 
-                    astNode.AppendNode(localAstNode);
+                    parseTreeNode.AppendNode(localAstNode);
                 }
             }
             else
@@ -61,15 +61,15 @@ namespace TyPy.Compiler.ParsingConstructs
                         throw new ParseException($"Grammar is incomplete. Token {parseToken} could not be resolved.");
                     }
 
-                    if (!configuration.Grammar[parseToken].TryParse(lexemes.Slice(astNode.LexemeCount), configuration,
+                    if (!configuration.Grammar[parseToken].TryParse(lexemes.Slice(parseTreeNode.LexemeCount), configuration,
                         out var localAstNode))
                     {
-                        astNode = null;
+                        parseTreeNode = null;
                         return false;
                     }
 
                     localAstNode.Token = parseToken;
-                    astNode.AppendNode(localAstNode);
+                    parseTreeNode.AppendNode(localAstNode);
                 }
             }
 

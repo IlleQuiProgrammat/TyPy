@@ -33,7 +33,7 @@ namespace TyPy.Compiler.ParsingConstructs
         }
         
         public bool TryParse(ArraySegment<Lexeme> lexemes, PipelineConfiguration configuration,
-            out AstNode astNode)
+            out ParseTreeNode parseTreeNode)
         {
             if (SubParsables is not null)
             {
@@ -41,7 +41,7 @@ namespace TyPy.Compiler.ParsingConstructs
                 {
                     if (subParsable.TryParse(lexemes, configuration, out var localAstNode))
                     {
-                        astNode = localAstNode;
+                        parseTreeNode = localAstNode;
                         return true;
                     }
                 }
@@ -57,14 +57,14 @@ namespace TyPy.Compiler.ParsingConstructs
 
                     if (configuration.Grammar[parseToken].TryParse(lexemes, configuration, out var localAstNode))
                     {
-                        astNode = localAstNode;
-                        astNode.Token = parseToken;
+                        parseTreeNode = localAstNode;
+                        parseTreeNode.Token = parseToken;
                         return true;
                     }
                 }
             }
 
-            astNode = null;
+            parseTreeNode = null;
             return false;
         }
     }
