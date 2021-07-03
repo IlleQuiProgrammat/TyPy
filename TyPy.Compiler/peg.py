@@ -539,6 +539,7 @@ if __name__ == '__main__':
     for rule in ast:  # Check for left-recursion in O(n)
         if rule in visited:
             continue
+        cnt += 1
         check_left_recursion(rule)
     print("Left-recursive rules: ")
     for rule in recursive_rules:
