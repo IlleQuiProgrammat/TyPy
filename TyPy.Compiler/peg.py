@@ -27,6 +27,10 @@ from enum import Enum
 import string
 
 translation_table = {}
+visited = {}
+rules = {}
+cnt = 0
+recursive_rules = []
 
 
 class Lexemes(Enum):
@@ -486,6 +490,39 @@ def primary(tokens, offset):
         return None, 0
 
 
+def check_left_recursion(rule):
+    """
+    DFS the grammar to check for left-recursion
+    """
+    if rule in visited and visited[rule] == cnt:
+        recursive_rules.append(rule)
+        return True
+
+    visited[rule] = cnt
+
+    if isinstance(rule, Name) and not rule.lexeme[1].isupper():
+        if rule.lexeme[1] not in rules:
+            return False
+        return check_left_recursion(rules[rule.lexeme[1]])
+    if isinstance(rule, Statement):
+        for sub_rule in rule.rules:
+            check_left_recursion(sub_rule)
+            if not (isinstance(sub_rule, Optional) or isinstance(sub_rule, ManyOrNone)):
+                break
+
+    if isinstance(rule, Sequence):
+        for sub_rule in rule.seq:
+            check_left_recursion(sub_rule)
+            if not (isinstance(sub_rule, Optional) or isinstance(sub_rule, ManyOrNone)):
+                break
+    elif isinstance(rule, Alternative):
+        for sub_rule in rule.alt:
+            check_left_recursion(sub_rule)
+
+    # Required terminal
+    return False
+
+
 if __name__ == '__main__':
     translation_file = open("Python9.5GrammarTokenLookup.csv", 'r')
     translation_table['str_,'] = 'Comma'
@@ -498,4 +535,13 @@ if __name__ == '__main__':
     grammar_file.close()
     lexed_tokens = list(filter(lambda x: x[0] != Lexemes.WHITESPACE, lexed_tokens))
     ast = compilation_unit(lexed_tokens, 0)
+    rules = {x.name[1]: x for x in ast}
+    for rule in ast:  # Check for left-recursion in O(n)
+        if rule in visited:
+            continue
+        check_left_recursion(rule)
+    print("Left-recursive rules: ")
+    for rule in recursive_rules:
+        print(rule.name[1])
+    print("Unaltered compilation:")
     print(*list(map(lambda x: x.compile(), ast)), sep=",\n")
