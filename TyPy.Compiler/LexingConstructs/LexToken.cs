@@ -6,8 +6,6 @@
         EndMarker,
         Plus,
         Minus,
-        Times,
-        Divide,
         Caret,
         OpenBrackets,
         CloseBrackets,
@@ -24,7 +22,7 @@
         Break,
         Continue,
         Colon,
-        TypeComment,
+        TypeComment, //
         PlusEquals,
         MinusEquals,
         TimesEquals,
@@ -62,7 +60,7 @@
         Raise,
         Def,
         RightArrow,
-        Indent,
+        Indent, //
         OpenSqBrackets,
         CloseSqBrackets,
         OpenCurlyBrackets,
@@ -95,7 +93,7 @@
         Or,
         Lambda,
         Taurus,
-        Dedent,
+        Dedent, // 
         Class
     }
 }

@@ -7,7 +7,9 @@ namespace TyPy.Compiler.ParsingConstructs
     {
         public bool TryParse(ArraySegment<Lexeme> lexemes, PipelineConfiguration configuration, out ParseTreeNode parseTreeNode)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
+            parseTreeNode = null;
+            return true;
         }
     }
 }

@@ -541,8 +541,11 @@ if __name__ == '__main__':
             continue
         cnt += 1
         check_left_recursion(rule)
-    print("Left-recursive rules: ")
-    for rule in recursive_rules:
-        print(rule.name[1])
+    if len(recursive_rules) > 0:
+        print("Left-recursive rules: ")
+        for rule in recursive_rules:
+            print(rule.name[1])
+    else:
+        print("No recursive rules found. You're good to go! (probably)")
     print("Unaltered compilation:")
     print(*list(map(lambda x: x.compile(), ast)), sep=",\n")

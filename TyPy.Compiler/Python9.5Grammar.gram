@@ -99,9 +99,12 @@ dotted_as_names:
     | ','.dotted_as_name+ 
 dotted_as_name:
     | dotted_name ['as' NAME ] 
-dotted_name:
-    | dotted_name '.' NAME 
-    | NAME
+# dotted_name:
+#     | dotted_name '.' NAME 
+#     | NAME
+# converted to:
+
+dotted_name: '.'.NAME+
 
 if_stmt:
     | 'if' named_expression ':' block elif_stmt 
@@ -317,31 +320,55 @@ in_bitwise_or: 'in' bitwise_or
 isnot_bitwise_or: 'is' 'not' bitwise_or 
 is_bitwise_or: 'is' bitwise_or 
 
-bitwise_or:
-    | bitwise_or '|' bitwise_xor 
-    | bitwise_xor
-bitwise_xor:
-    | bitwise_xor '^' bitwise_and 
-    | bitwise_and
-bitwise_and:
-    | bitwise_and '&' shift_expr 
-    | shift_expr
-shift_expr:
-    | shift_expr '<<' sum 
-    | shift_expr '>>' sum 
-    | sum
+# bitwise_or:
+#     | bitwise_or '|' bitwise_xor 
+#     | bitwise_xor
+# Converted to:
 
-sum:
-    | sum '+' term 
-    | sum '-' term 
-    | term
-term:
-    | term '*' factor 
-    | term '/' factor 
-    | term '//' factor 
-    | term '%' factor 
-    | term '@' factor 
-    | factor
+bitwise_or: '|'.bitwise_xor+
+
+# bitwise_xor:
+#     | bitwise_xor '^' bitwise_and 
+#     | bitwise_and
+
+# Converted to:
+
+bitwise_xor: '^'.bitwise_and+
+
+# bitwise_and:
+#     | bitwise_and '&' shift_expr 
+#     | shift_expr
+# Converted to
+
+bitwise_and: '&'.shift_expr+
+
+# shift_expr:
+#     | shift_expr '<<' sum 
+#     | shift_expr '>>' sum 
+#     | sum
+# Converted to:
+
+shift_expr: sum (('<<' | '>>') sum)*
+
+# sum:
+#     | sum '+' term 
+#     | sum '-' term 
+#     | term
+# Converted to:
+
+sum: term (('+' | '-') term)*
+
+# term:
+#     | term '*' factor 
+#     | term '/' factor 
+#     | term '//' factor 
+#     | term '%' factor 
+#     | term '@' factor 
+#     | factor
+# Converted to:
+
+term: factor (('*' | '/' | '//' | '%' | '@') factor)*
+
 factor:
     | '+' factor 
     | '-' factor 
@@ -353,13 +380,16 @@ power:
 await_primary:
     | AWAIT primary 
     | primary
-primary:
-    | invalid_primary  # must be before 'primay genexp' because of invalid_genexp
-    | primary '.' NAME 
-    | primary genexp 
-    | primary '(' [arguments] ')' 
-    | primary '[' slices ']' 
-    | atom
+# primary:
+#     | invalid_primary  # must be before 'primay genexp' because of invalid_genexp
+#     | primary '.' NAME 
+#     | primary genexp 
+#     | primary '(' [arguments] ')' 
+#     | primary '[' slices ']' 
+#     | atom
+
+# Converted to:    
+primary: atom ('.' NAME | '[' slices ']' | genexp | '(' [arguments] ')')* 
 
 slices:
     | slice !',' 
@@ -469,10 +499,13 @@ del_t_atom:
     | '(' [del_targets] ')' 
     | '[' [del_targets] ']' 
 
-t_primary:
-    | t_primary '.' NAME &t_lookahead 
-    | t_primary '[' slices ']' &t_lookahead 
-    | t_primary genexp &t_lookahead 
-    | t_primary '(' [arguments] ')' &t_lookahead 
-    | atom &t_lookahead 
+# t_primary:
+#     | t_primary '.' NAME &t_lookahead 
+#     | t_primary '[' slices ']' &t_lookahead 
+#     | t_primary genexp &t_lookahead 
+#     | t_primary '(' [arguments] ')' &t_lookahead 
+#     | atom &t_lookahead 
+# Converted to:
+
+t_primary: atom ('.' NAME | '[' slices ']' | genexp | '(' [arguments] ')')* &t_lookahead
 t_lookahead: '(' | '[' | '.'

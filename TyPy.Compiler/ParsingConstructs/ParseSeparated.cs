@@ -92,7 +92,9 @@ namespace TyPy.Compiler.ParsingConstructs
 
             do
             {
-                success &= resolvedSeparator.TryParse(lexemes.Slice(localAstNode.LexemeCount), configuration, out _);
+                success &= resolvedSeparator.TryParse(lexemes.Slice(localAstNode.LexemeCount), configuration, out var separator);
+                // TODO: remove the separator when creating an AST as per the PEG grammar separation syntax
+                localAstNode.AppendNode(separator);
                 success &= resolvedParsable.TryParse(lexemes.Slice(localAstNode.LexemeCount), configuration,
                     out var nextAstNode);
 

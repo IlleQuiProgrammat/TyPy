@@ -44,9 +44,9 @@ namespace TyPy.Cli
             Console.WriteLine(inFile?.FullName);
             var tyPyPipeline = new TyPyPipeline();
             var begin = DateTime.Now;
-            tyPyPipeline.Execute("x = 4\n" +
-                                 "y = 15\n" +
-                                 "z = (x - y * 2) ** 3\n");
+            tyPyPipeline.Execute("import string\n" +
+                                 "import os as operating_system\n" +
+                                 "from functools import reduce as red, wraps as wrap\n");
             Console.WriteLine($"Compilation took: {DateTime.Now - begin}");
             // var assemblyName = new AssemblyName("TestOutput");
             // var assemblyBuilder =
